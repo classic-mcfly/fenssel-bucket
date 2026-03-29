@@ -1,22 +1,20 @@
 {
-    "version": "7.1.130",
+    "version": "7.1.120",
     "description": "Official Deezer music streaming desktop application",
     "homepage": "https://www.deezer.com",
     "license": "Freeware",
     "architecture": {
         "32bit": {
-            "url": "https://cdn-content.dzcdn.net/builds/deezer-desktop/8cF2rAuKxLcU1oMDmCYm8Uiqe19Ql0HTySLssdzLkQ9ZWHuDTp2JBtQOvdrFzWPA/win32/x86/7.1.130/DeezerDesktopSetup_7.1.130.exe",
-            "hash": "2B1188C57322CAB60C1608E7CC08AE4E2833C7C4C40ADF5F048B2C045D50F454"
+            "url": "https://www.deezer.com/desktop/download?platform=win32&architecture=x86#/DeezerDesktopSetup_7.1.120.exe",
+            "hash": "2b1188c57322cab60c1608e7cc08ae4e2833c7c4c40adf5f048b2c045d50f454"
         },
         "64bit": {
-            "url": "https://cdn-content.dzcdn.net/builds/deezer-desktop/8cF2rAuKxLcU1oMDmCYm8Uiqe19Ql0HTySLssdzLkQ9ZWHuDTp2JBtQOvdrFzWPA/win32/x86/7.1.130/DeezerDesktopSetup_7.1.130.exe",
-            "hash": "2B1188C57322CAB60C1608E7CC08AE4E2833C7C4C40ADF5F048B2C045D50F454"
+            "url": "https://www.deezer.com/desktop/download?platform=win32&architecture=x86#/DeezerDesktopSetup_7.1.120.exe",
+            "hash": "2b1188c57322cab60c1608e7cc08ae4e2833c7c4c40adf5f048b2c045d50f454"
         }
     },
     "installer": {
-        "script": [
-            "Start-Process -Wait \"$dir\\DeezerDesktopSetup_$version.exe\" -ArgumentList '/S'"
-        ]
+        "script": "Start-Process -Wait \"$dir\\DeezerDesktopSetup_$version.exe\" -ArgumentList '/S'"
     },
     "post_install": [
         "$sm = if ($global) { 'CommonStartMenu' } else { 'StartMenu' }",
