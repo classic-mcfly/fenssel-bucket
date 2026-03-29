@@ -7,6 +7,10 @@
         "32bit": {
             "url": "https://cdn-content.dzcdn.net/builds/deezer-desktop/8cF2rAuKxLcU1oMDmCYm8Uiqe19Ql0HTySLssdzLkQ9ZWHuDTp2JBtQOvdrFzWPA/win32/x86/7.1.130/DeezerDesktopSetup_7.1.130.exe",
             "hash": "2B1188C57322CAB60C1608E7CC08AE4E2833C7C4C40ADF5F048B2C045D50F454"
+        },
+        "64bit": {
+            "url": "https://cdn-content.dzcdn.net/builds/deezer-desktop/8cF2rAuKxLcU1oMDmCYm8Uiqe19Ql0HTySLssdzLkQ9ZWHuDTp2JBtQOvdrFzWPA/win32/x86/7.1.130/DeezerDesktopSetup_7.1.130.exe",
+            "hash": "2B1188C57322CAB60C1608E7CC08AE4E2833C7C4C40ADF5F048B2C045D50F454"
         }
     },
     "installer": {
@@ -30,6 +34,9 @@
     "autoupdate": {
         "architecture": {
             "32bit": {
+                "url": "https://www.deezer.com/desktop/download?platform=win32&architecture=x86#/DeezerDesktopSetup_$version.exe"
+            },
+            "64bit": {
                 "url": "https://www.deezer.com/desktop/download?platform=win32&architecture=x86#/DeezerDesktopSetup_$version.exe"
             }
         }
