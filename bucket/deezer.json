@@ -18,13 +18,36 @@
             "Start-Process -Wait \"$dir\\DeezerDesktopSetup_$version.exe\" -ArgumentList '/S'"
         ]
     },
-    "shortcuts": [
-        ["$env:LOCALAPPDATA\\Programs\\Deezer\\Deezer.exe", "Deezer"]
+    "post_install": [
+        "$deezerExe = Join-Path $env:LOCALAPPDATA 'Programs\\Deezer\\Deezer.exe'",
+        "if (Test-Path $deezerExe) {",
+        "    $sm = if ($global) { 'CommonStartMenu' } else { 'StartMenu' }",
+        "    $folder = Join-Path ([Environment]::GetFolderPath($sm)) 'Programs\\Scoop Apps'",
+        "    New-Item -ItemType Directory -Force -Path $folder | Out-Null",
+        "    $ws = New-Object -ComObject WScript.Shell",
+        "    $sc = $ws.CreateShortcut((Join-Path $folder 'Deezer.lnk'))",
+        "    $sc.TargetPath = $deezerExe",
+        "    $sc.WorkingDirectory = (Split-Path $deezerExe -Parent)",
+        "    $sc.Save()",
+        "    Write-Host 'Created Start Menu shortcut for Deezer'",
+        "} else {",
+        "    Write-Host \"Deezer.exe not found at $deezerExe - shortcut skipped\" -ForegroundColor Yellow",
+        "}"
+    ],
+    "pre_uninstall": [
+        "$sm = if ($global) { 'CommonStartMenu' } else { 'StartMenu' }",
+        "$lnk = Join-Path ([Environment]::GetFolderPath($sm)) 'Programs\\Scoop Apps\\Deezer.lnk'",
+        "if (Test-Path $lnk) { Remove-Item $lnk -ErrorAction SilentlyContinue }"
     ],
     "uninstaller": {
         "script": [
-            "$uninstaller = Get-ChildItem \"$env:LOCALAPPDATA\\Programs\\Deezer\" -Filter 'Uninstall*.exe' -ErrorAction SilentlyContinue | Select-Object -First 1",
-            "if ($uninstaller) { Start-Process -Wait $uninstaller.FullName -ArgumentList '/S' }"
+            "$dz = Join-Path $env:LOCALAPPDATA 'Programs\\Deezer'",
+            "if (Test-Path -LiteralPath $dz) {",
+            "    $u = Get-ChildItem -LiteralPath $dz -Filter 'Uninstall*.exe' -ErrorAction SilentlyContinue | Select-Object -First 1",
+            "    if (!$u) { $u = Get-ChildItem -LiteralPath $dz -Filter 'unins*.exe' -ErrorAction SilentlyContinue | Select-Object -First 1 }",
+            "    if ($u) { Start-Process -Wait $u.FullName -ArgumentList '/S' }",
+            "    else { Write-Host 'No Deezer uninstaller exe in' $dz -ForegroundColor Yellow }",
+            "}"
         ]
     },
     "checkver": {
