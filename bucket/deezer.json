@@ -19,35 +19,43 @@
         ]
     },
     "post_install": [
-        "$deezerExe = Join-Path $env:LOCALAPPDATA 'Programs\\Deezer\\Deezer.exe'",
-        "if (Test-Path $deezerExe) {",
-        "    $sm = if ($global) { 'CommonStartMenu' } else { 'StartMenu' }",
-        "    $folder = Join-Path ([Environment]::GetFolderPath($sm)) 'Programs\\Scoop Apps'",
-        "    New-Item -ItemType Directory -Force -Path $folder | Out-Null",
-        "    $ws = New-Object -ComObject WScript.Shell",
-        "    $sc = $ws.CreateShortcut((Join-Path $folder 'Deezer.lnk'))",
-        "    $sc.TargetPath = $deezerExe",
-        "    $sc.WorkingDirectory = (Split-Path $deezerExe -Parent)",
-        "    $sc.Save()",
-        "    Write-Host 'Created Start Menu shortcut for Deezer'",
+        "$sm = if ($global) { 'CommonStartMenu' } else { 'StartMenu' }",
+        "$scoopLnkFolder = Join-Path ([Environment]::GetFolderPath($sm)) 'Programs\\Scoop Apps'",
+        "New-Item -ItemType Directory -Force -Path $scoopLnkFolder | Out-Null",
+        "$destLnk = Join-Path $scoopLnkFolder 'Deezer.lnk'",
+        "$roamPrograms = Join-Path $env:APPDATA 'Microsoft\\Windows\\Start Menu\\Programs'",
+        "$srcLnk = Join-Path $roamPrograms 'Deezer.lnk'",
+        "if (!(Test-Path -LiteralPath $srcLnk)) { $srcLnk = Join-Path $roamPrograms 'Deezer\\Deezer.lnk' }",
+        "if (Test-Path -LiteralPath $srcLnk) {",
+        "    Move-Item -LiteralPath $srcLnk -Destination $destLnk -Force",
+        "    Write-Host 'Moved Deezer Start Menu shortcut to Scoop Apps'",
         "} else {",
-        "    Write-Host \"Deezer.exe not found at $deezerExe - shortcut skipped\" -ForegroundColor Yellow",
+        "    $deezerExe = Join-Path $env:LOCALAPPDATA 'Programs\\deezer-desktop\\Deezer.exe'",
+        "    if (Test-Path -LiteralPath $deezerExe) {",
+        "        $ws = New-Object -ComObject WScript.Shell",
+        "        $sc = $ws.CreateShortcut($destLnk)",
+        "        $sc.TargetPath = $deezerExe",
+        "        $sc.WorkingDirectory = (Split-Path $deezerExe -Parent)",
+        "        $sc.Save()",
+        "        Write-Host 'Created Scoop Apps shortcut (installer left no Start Menu link)'",
+        "    } else { Write-Host 'Deezer shortcut and exe not found - check install' -ForegroundColor Yellow }",
         "}"
     ],
     "pre_uninstall": [
         "$sm = if ($global) { 'CommonStartMenu' } else { 'StartMenu' }",
-        "$lnk = Join-Path ([Environment]::GetFolderPath($sm)) 'Programs\\Scoop Apps\\Deezer.lnk'",
-        "if (Test-Path $lnk) { Remove-Item $lnk -ErrorAction SilentlyContinue }"
+        "$roamPrograms = Join-Path $env:APPDATA 'Microsoft\\Windows\\Start Menu\\Programs'",
+        "$candidates = @(",
+        "    (Join-Path ([Environment]::GetFolderPath($sm)) 'Programs\\Scoop Apps\\Deezer.lnk'),",
+        "    (Join-Path $roamPrograms 'Deezer.lnk'),",
+        "    (Join-Path $roamPrograms 'Deezer\\Deezer.lnk')",
+        ")",
+        "foreach ($p in $candidates) { if ($p -and (Test-Path -LiteralPath $p)) { Remove-Item -LiteralPath $p -Force -ErrorAction SilentlyContinue } }"
     ],
     "uninstaller": {
         "script": [
-            "$dz = Join-Path $env:LOCALAPPDATA 'Programs\\Deezer'",
-            "if (Test-Path -LiteralPath $dz) {",
-            "    $u = Get-ChildItem -LiteralPath $dz -Filter 'Uninstall*.exe' -ErrorAction SilentlyContinue | Select-Object -First 1",
-            "    if (!$u) { $u = Get-ChildItem -LiteralPath $dz -Filter 'unins*.exe' -ErrorAction SilentlyContinue | Select-Object -First 1 }",
-            "    if ($u) { Start-Process -Wait $u.FullName -ArgumentList '/S' }",
-            "    else { Write-Host 'No Deezer uninstaller exe in' $dz -ForegroundColor Yellow }",
-            "}"
+            "$u = Join-Path $env:LOCALAPPDATA 'Programs\\deezer-desktop\\Uninstall Deezer.exe'",
+            "if (Test-Path -LiteralPath $u) { Start-Process -Wait -FilePath $u -ArgumentList '/S' }",
+            "else { Write-Host 'Uninstaller not found:' $u -ForegroundColor Yellow }"
         ]
     },
     "checkver": {
