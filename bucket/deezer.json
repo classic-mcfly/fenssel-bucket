@@ -1,16 +1,16 @@
 {
-    "version": "7.1.270",
+    "version": "7.1.290",
     "description": "Official Deezer music streaming desktop application",
     "homepage": "https://www.deezer.com",
     "license": "Freeware",
     "architecture": {
         "32bit": {
-            "url": "https://www.deezer.com/desktop/download?platform=win32&architecture=x86#/DeezerDesktopSetup_7.1.270.exe",
-            "hash": "83ed618fbf62cdb005b5e001bfafd45aa96b828e0a5299d9f48ac02eb1a840e1"
+            "url": "https://www.deezer.com/desktop/download?platform=win32&architecture=x86#/DeezerDesktopSetup_7.1.290.exe",
+            "hash": "33c1205aaa9f6622c10cda3a5271bd951a85cf040e8dda8e6621abdbf8995c22"
         },
         "64bit": {
-            "url": "https://www.deezer.com/desktop/download?platform=win32&architecture=x86#/DeezerDesktopSetup_7.1.270.exe",
-            "hash": "83ed618fbf62cdb005b5e001bfafd45aa96b828e0a5299d9f48ac02eb1a840e1"
+            "url": "https://www.deezer.com/desktop/download?platform=win32&architecture=x86#/DeezerDesktopSetup_7.1.290.exe",
+            "hash": "33c1205aaa9f6622c10cda3a5271bd951a85cf040e8dda8e6621abdbf8995c22"
         }
     },
     "installer": {
